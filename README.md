@@ -1,4 +1,4 @@
-# **Employee MS**
+# **Employee MS**: Full-Stack MERN Employee Management System
 
 A **Full-Stack MERN Employee Management System** designed to streamline and automate employee-related tasks for organizations.
 
