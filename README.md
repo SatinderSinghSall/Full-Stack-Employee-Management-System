@@ -1,7 +1,3 @@
-Here’s an improved, professional **README.md** for your **Employee MS** project. It includes structured sections, badges, tech stack, setup instructions, and usage details:
-
----
-
 # **Employee MS**
 
 A **Full-Stack MERN Employee Management System** designed to streamline and automate employee-related tasks for organizations.
