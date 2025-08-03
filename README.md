@@ -20,14 +20,14 @@ It provides organizations with a centralized platform to manage employees, depar
 
 ## **✨ Key Features**
 
-✅ **Authentication & Authorization** – Secure login with JWT
-✅ **Dashboard** – Overview of key metrics and quick actions
-✅ **Employee Management** – Add, edit, delete, and view employee details
-✅ **Department Management** – Organize employees by department
-✅ **Salary Management** – Track and update employee salaries
-✅ **Leave Management** – Request and approve employee leaves
-✅ **Attendance Management** – Record and monitor daily attendance
-✅ **Settings** – Customize system preferences
+- ✅ **Authentication & Authorization** – Secure login with JWT
+- ✅ **Dashboard** – Overview of key metrics and quick actions
+- ✅ **Employee Management** – Add, edit, delete, and view employee details
+- ✅ **Department Management** – Organize employees by department
+- ✅ **Salary Management** – Track and update employee salaries
+- ✅ **Leave Management** – Request and approve employee leaves
+- ✅ **Attendance Management** – Record and monitor daily attendance
+- ✅ **Settings** – Customize system preferences
 
 ---
 
