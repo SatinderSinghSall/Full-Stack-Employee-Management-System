@@ -1,5 +1,11 @@
 # **Employee MS**: Full-Stack Employee Management System
 
+---
+
+## - Satinder Singh Sall
+
+---
+
 A **Full-Stack MERN Employee Management System** designed to streamline and automate employee-related tasks for organizations.
 
 ![Tech](https://img.shields.io/badge/stack-MERN-green.svg)
