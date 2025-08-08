@@ -1,9 +1,9 @@
 import axios from "axios";
-import { useContext, useEffect, createContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
-const UserContext = createContext();
+const userContext = createContext();
 
-const AuthContext = ({ children }) => {
+const authContext = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -11,25 +11,26 @@ const AuthContext = ({ children }) => {
     const verifyUser = async () => {
       try {
         const token = localStorage.getItem("token");
-
         if (token) {
           const response = await axios.get(
             "http://localhost:5173/api/auth/verify",
             {
-              headers: { Authorization: `Bearer ${token}` },
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             }
           );
+          if (response.data.success) {
+            setUser(response.data.user);
+          }
         } else {
           setUser(null);
-        }
-        if (response.data.success) {
-          setUser(response.data.user);
+          setLoading(false);
         }
       } catch (error) {
         if (error.response && !error.response.data.error) {
           setUser(null);
         }
-        console.log(error);
       } finally {
         setLoading(false);
       }
@@ -45,16 +46,12 @@ const AuthContext = ({ children }) => {
     setUser(null);
     localStorage.removeItem("token");
   };
-
   return (
-    <UserContext.Provider value={{ user, login, logout, loading }}>
+    <userContext.Provider value={{ user, login, logout, loading }}>
       {children}
-    </UserContext.Provider>
+    </userContext.Provider>
   );
 };
 
-export const useAuth = () => {
-  return useContext(UserContext);
-};
-
-export default AuthContext;
+export const useAuth = () => useContext(userContext);
+export default authContext;
