@@ -16,7 +16,7 @@ const AdminDashboard = () => {
   if (!user) {
     navigate("/login");
   }
-  console.log(user);
+
   return (
     <div>
       <h1>Admin Dashboard</h1>
