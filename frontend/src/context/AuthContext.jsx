@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const userContext = createContext();
 
@@ -12,14 +13,11 @@ const authContext = ({ children }) => {
       try {
         const token = localStorage.getItem("token");
         if (token) {
-          const response = await axios.get(
-            "http://localhost:5000/api/auth/verify",
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
+          const response = await axios.get(`${API_BASE_URL}/api/auth/verify`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
           if (response.data.success) {
             setUser(response.data.user);
           }

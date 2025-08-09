@@ -5,6 +5,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -23,10 +24,10 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        { email, password }
-      );
+      const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
+        email,
+        password,
+      });
       if (response.data.success) {
         setSuccess("Login successful! Redirecting...");
         toast.success("Login Successful!");
