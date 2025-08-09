@@ -1,3 +1,4 @@
+import AdminSidebar from "../components/dashboard/AdminSidebar";
 import { useAuth } from "../context/AuthContext";
 
 const AdminDashboard = () => {
@@ -5,8 +6,7 @@ const AdminDashboard = () => {
 
   return (
     <div>
-      <h1>Admin Dashboard</h1>
-      <p>Hello, Admin {user && user.name}</p>
+      <AdminSidebar />
     </div>
   );
 };
