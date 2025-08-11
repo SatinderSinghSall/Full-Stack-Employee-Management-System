@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 
 import connectDatabase from "./db/db.js";
 import authRouter from "./routes/auth.js";
+import departmentRouter from "./routes/department.js";
 
 if (process.env.NODE_ENV === "production") {
   dotenv.config({ path: ".env.production" });
@@ -45,6 +46,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth/", authRouter);
+app.use("/api/department", departmentRouter);
 
 const PORT = process.env.PORT || 5000;
 
