@@ -5,7 +5,11 @@ import dotenv from "dotenv";
 import connectDatabase from "./db/db.js";
 import authRouter from "./routes/auth.js";
 
-dotenv.config();
+if (process.env.NODE_ENV === "production") {
+  dotenv.config({ path: ".env.production" });
+} else {
+  dotenv.config({ path: ".env.development" });
+}
 
 const app = express();
 
