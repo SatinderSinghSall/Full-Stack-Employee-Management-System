@@ -39,7 +39,7 @@ const addDepartment = async (req, res) => {
 
     const newDepartment = new Department({
       Department_Name: department_name.trim(),
-      description,
+      Description: description,
     });
 
     await newDepartment.save();
@@ -97,7 +97,7 @@ const updateDepartment = async (req, res) => {
       id,
       {
         Department_Name: department_name.trim(),
-        description,
+        Description: description,
       },
       { new: true }
     );

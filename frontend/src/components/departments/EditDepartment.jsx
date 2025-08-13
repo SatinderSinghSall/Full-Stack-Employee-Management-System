@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { Pencil } from "lucide-react";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const EditDepartment = () => {
@@ -10,6 +12,7 @@ const EditDepartment = () => {
     description: "",
   });
   const [depLoading, setDepLoading] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,7 +36,7 @@ const EditDepartment = () => {
         }
       } catch (error) {
         if (error.response && !error.response.data.success) {
-          alert(error.response.data.error);
+          toast.error(error.response.data.error);
         }
       } finally {
         setDepLoading(false);
@@ -46,10 +49,36 @@ const EditDepartment = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setDepartment({ ...department, [name]: value });
+    setValidationErrors({ ...validationErrors, [name]: "" }); // Clear error when typing
+  };
+
+  const validateForm = () => {
+    let errors = {};
+
+    if (!department.department_name.trim()) {
+      errors.department_name = "Department name is required.";
+    } else if (department.department_name.trim().length < 3) {
+      errors.department_name = "Department name must be at least 3 characters.";
+    }
+
+    if (
+      department.description.trim() &&
+      department.description.trim().length < 10
+    ) {
+      errors.description =
+        "Description must be at least 10 characters if provided.";
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
+
     try {
       const payload = {
         department_name: department.department_name,
@@ -57,7 +86,7 @@ const EditDepartment = () => {
       };
 
       const response = await axios.put(
-        `http://localhost:5000/api/department/${id}`,
+        `${API_BASE_URL}/api/department/${id}`,
         payload,
         {
           headers: {
@@ -67,61 +96,96 @@ const EditDepartment = () => {
       );
 
       if (response.data.success) {
+        toast.success("Department updated successfully!");
         navigate("/admin-dashboard/departments");
       }
     } catch (error) {
       if (error.response && !error.response.data.success) {
-        alert(error.response.data.error);
+        toast.error(error.response.data.error);
+      } else {
+        toast.error(
+          error.message || "An error occurred while updating the department."
+        );
       }
     }
   };
 
-  return depLoading ? (
-    <div>Loading ...</div>
-  ) : (
-    <div className="max-w-3xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md w-96">
-      <h2 className="text-2xl font-bold mb-6">Edit Department</h2>
-      <form onSubmit={handleSubmit}>
+  if (depLoading) {
+    return (
+      <div className="text-center mt-20 text-lg text-gray-500">Loading...</div>
+    );
+  }
+
+  return (
+    <div className="max-w-3xl mx-auto mt-12 p-8 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg border border-gray-100">
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold text-gray-800">Edit Department</h2>
+        <p className="text-gray-500 mt-1">
+          Update the details below and save your changes.
+        </p>
+      </div>
+
+      <form className="space-y-6" onSubmit={handleSubmit}>
         <div>
           <label
             htmlFor="department_name"
-            className="text-sm font-medium text-gray-700"
+            className="block text-sm font-semibold text-gray-700 mb-1"
           >
             Department Name
           </label>
           <input
             type="text"
+            id="department_name"
             name="department_name"
-            onChange={handleChange}
             value={department.department_name}
-            placeholder="Department Name"
-            className="mt-1 w-full p-2 border border-gray-300 rounded-md"
-            required
+            placeholder="Enter the department name"
+            className={`w-full px-4 py-3 border ${
+              validationErrors.department_name
+                ? "border-red-500"
+                : "border-gray-200"
+            } rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition shadow-sm`}
+            onChange={handleChange}
           />
+          {validationErrors.department_name && (
+            <p className="text-red-500 text-sm mt-1">
+              {validationErrors.department_name}
+            </p>
+          )}
         </div>
 
-        <div className="mt-3">
+        <div>
           <label
             htmlFor="description"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-semibold text-gray-700 mb-1"
           >
             Description
           </label>
           <textarea
+            id="description"
             name="description"
-            placeholder="Description"
-            onChange={handleChange}
             value={department.description}
-            className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+            placeholder="Write a brief description..."
             rows="4"
+            className={`w-full px-4 py-3 border ${
+              validationErrors.description
+                ? "border-red-500"
+                : "border-gray-200"
+            } rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition shadow-sm resize-none`}
+            onChange={handleChange}
           />
+          {validationErrors.description && (
+            <p className="text-red-500 text-sm mt-1">
+              {validationErrors.description}
+            </p>
+          )}
         </div>
 
         <button
           type="submit"
-          className="w-full mt-6 bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
+          className="w-full flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 rounded-lg shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5"
         >
-          Edit Department
+          <Pencil size={20} />
+          Save Changes
         </button>
       </form>
     </div>
