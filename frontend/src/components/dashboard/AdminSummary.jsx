@@ -10,6 +10,15 @@ import {
   FaUsers,
 } from "react-icons/fa";
 import axios from "axios";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+const SkeletonCard = () => (
+  <div className="bg-white rounded-xl shadow p-6 animate-pulse">
+    <div className="h-10 w-10 bg-gray-300 rounded-full mb-4"></div>
+    <div className="h-4 bg-gray-300 rounded w-2/3 mb-2"></div>
+    <div className="h-6 bg-gray-300 rounded w-1/2"></div>
+  </div>
+);
 
 const AdminSummary = () => {
   const [summary, setSummary] = useState(null);
@@ -18,8 +27,6 @@ const AdminSummary = () => {
   useEffect(() => {
     const fetchSummary = async () => {
       try {
-        const API_BASE_URL = "http://localhost:5000";
-
         const { data } = await axios.get(
           `${API_BASE_URL}/api/dashboard/summary`,
           {
@@ -28,7 +35,6 @@ const AdminSummary = () => {
             },
           }
         );
-
         setSummary(data);
       } catch (error) {
         console.error(error.message);
@@ -48,16 +54,24 @@ const AdminSummary = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64 text-lg font-semibold animate-pulse">
-        Loading...
-      </div>
-    );
-  }
+      <div className="p-6">
+        <h3 className="text-2xl font-bold text-gray-800 mb-6">
+          Dashboard Overview
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(3)].map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
+        </div>
 
-  if (!summary) {
-    return (
-      <div className="flex justify-center items-center h-64 text-red-500 font-semibold">
-        Failed to load dashboard data.
+        <h4 className="text-center text-2xl font-bold text-gray-800 mt-12 mb-6">
+          Leave Details
+        </h4>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {[...Array(4)].map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
+        </div>
       </div>
     );
   }
@@ -67,7 +81,6 @@ const AdminSummary = () => {
   return (
     <div className="p-6">
       <h3 className="text-2xl font-bold text-gray-800">Dashboard Overview</h3>
-
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
         <SummaryCard
           icon={<FaUsers />}
@@ -93,7 +106,6 @@ const AdminSummary = () => {
         <h4 className="text-center text-2xl font-bold text-gray-800">
           Leave Details
         </h4>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
           <SummaryCard
             icon={<FaFileAlt />}
