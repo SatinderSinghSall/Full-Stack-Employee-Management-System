@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { PlusCircle, Loader2 } from "lucide-react";
 
 const AddEmployee = () => {
   const [loading, setLoading] = useState(false);
@@ -294,7 +295,10 @@ const AddEmployee = () => {
               Adding Employee...
             </>
           ) : (
-            "Add Employee"
+            <>
+              <PlusCircle size={20} />
+              Add Employee
+            </>
           )}
         </button>
       </form>
