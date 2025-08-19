@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Pencil } from "lucide-react";
+import { Pencil, Loader2 } from "lucide-react";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const EditDepartment = () => {
@@ -11,7 +11,8 @@ const EditDepartment = () => {
     department_name: "",
     description: "",
   });
-  const [depLoading, setDepLoading] = useState(false);
+  const [depLoading, setDepLoading] = useState(false); // page loading
+  const [saving, setSaving] = useState(false); // ⬅️ button loading
   const [validationErrors, setValidationErrors] = useState({});
   const navigate = useNavigate();
 
@@ -49,7 +50,7 @@ const EditDepartment = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setDepartment({ ...department, [name]: value });
-    setValidationErrors({ ...validationErrors, [name]: "" }); // Clear error when typing
+    setValidationErrors({ ...validationErrors, [name]: "" });
   };
 
   const validateForm = () => {
@@ -75,10 +76,9 @@ const EditDepartment = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
+    setSaving(true);
     try {
       const payload = {
         department_name: department.department_name,
@@ -107,12 +107,17 @@ const EditDepartment = () => {
           error.message || "An error occurred while updating the department."
         );
       }
+    } finally {
+      setSaving(false);
     }
   };
 
   if (depLoading) {
     return (
-      <div className="text-center mt-20 text-lg text-gray-500">Loading...</div>
+      <div className="flex flex-col items-center justify-center mt-20 text-gray-600">
+        <Loader2 className="animate-spin h-10 w-10 text-teal-500 mb-3" />
+        <p className="text-base font-medium">Fetching department data...</p>
+      </div>
     );
   }
 
@@ -182,10 +187,24 @@ const EditDepartment = () => {
 
         <button
           type="submit"
-          className="w-full flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 rounded-lg shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5"
+          disabled={saving}
+          className={`w-full flex items-center justify-center gap-2 ${
+            saving
+              ? "bg-teal-400 cursor-not-allowed"
+              : "bg-teal-600 hover:bg-teal-700"
+          } text-white font-semibold py-3 rounded-lg shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5`}
         >
-          <Pencil size={20} />
-          Save Changes
+          {saving ? (
+            <>
+              <Loader2 className="animate-spin" size={20} />
+              Saving...
+            </>
+          ) : (
+            <>
+              <Pencil size={20} />
+              Save Changes
+            </>
+          )}
         </button>
       </form>
     </div>

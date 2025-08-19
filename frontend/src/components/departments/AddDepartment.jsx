@@ -1,5 +1,5 @@
 import axios from "axios";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -14,11 +14,12 @@ const AddDepartment = () => {
   });
 
   const [validationErrors, setValidationErrors] = useState({});
+  const [loading, setLoading] = useState(false); // ⬅️ loading state
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setDepartment({ ...department, [name]: value });
-    setValidationErrors({ ...validationErrors, [name]: "" }); // clear error when typing
+    setValidationErrors({ ...validationErrors, [name]: "" });
   };
 
   const validateForm = () => {
@@ -45,10 +46,9 @@ const AddDepartment = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
@@ -74,6 +74,8 @@ const AddDepartment = () => {
         );
       }
       console.error("Error while adding a department:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -141,10 +143,24 @@ const AddDepartment = () => {
 
         <button
           type="submit"
-          className="w-full flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 rounded-lg shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5"
+          disabled={loading}
+          className={`w-full flex items-center justify-center gap-2 ${
+            loading
+              ? "bg-teal-400 cursor-not-allowed"
+              : "bg-teal-600 hover:bg-teal-700"
+          } text-white font-semibold py-3 rounded-lg shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5`}
         >
-          <PlusCircle size={20} />
-          Add Department
+          {loading ? (
+            <>
+              <Loader2 className="animate-spin" size={20} />
+              Adding...
+            </>
+          ) : (
+            <>
+              <PlusCircle size={20} />
+              Add Department
+            </>
+          )}
         </button>
       </form>
     </div>
