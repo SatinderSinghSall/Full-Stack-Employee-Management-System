@@ -108,7 +108,7 @@ const EmployeeList = () => {
         </div>
 
         <Link
-          to="/admin-dashboard/add-employee"
+          to="/admin-dashboard/employees/add-employee"
           className="flex items-center gap-2 px-5 py-2 bg-teal-600 rounded-lg text-white font-medium hover:bg-teal-700 transition"
         >
           <PlusCircle size={18} />

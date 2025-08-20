@@ -46,7 +46,7 @@ export const DepartmentButtons = ({ Id, onDepartmentDelete }) => {
     <>
       <div className="flex gap-2">
         <button
-          onClick={() => navigate(`/admin-dashboard/department/${Id}`)}
+          onClick={() => navigate(`/admin-dashboard/departments/edit/${Id}`)}
           className="flex items-center gap-1 px-3 py-1 bg-teal-600 text-white rounded hover:bg-teal-700 transition"
         >
           <Edit size={16} /> Edit

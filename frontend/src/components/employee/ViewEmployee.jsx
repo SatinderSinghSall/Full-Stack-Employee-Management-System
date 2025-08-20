@@ -42,12 +42,10 @@ const ViewEmployee = () => {
           </div>
 
           <div className="p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Profile Image Skeleton */}
             <div className="flex justify-center">
               <div className="w-40 h-40 rounded-full bg-gray-300"></div>
             </div>
 
-            {/* Details Skeleton */}
             <div className="md:col-span-2 space-y-6">
               {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="flex items-center gap-3">
@@ -89,7 +87,7 @@ const ViewEmployee = () => {
               alt={employee.userId.name}
               className="w-40 h-40 rounded-full border-4 border-indigo-500 shadow-md object-cover"
               onError={(e) => {
-                e.target.src = "/default-avatar.png"; // local fallback
+                e.target.src = "/default-avatar.png";
               }}
             />
           </div>
@@ -126,6 +124,14 @@ const ViewEmployee = () => {
               <p className="text-gray-900 capitalize">
                 {employee.maritalStatus}
               </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <p className="text-gray-700 font-semibold w-36">Created At:</p>
+              <p className="text-gray-900">{employee.createdAt}</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <p className="text-gray-700 font-semibold w-36">Updated At:</p>
+              <p className="text-gray-900">{employee.updatedAt}</p>
             </div>
           </div>
         </div>
