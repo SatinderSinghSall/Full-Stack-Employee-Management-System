@@ -147,6 +147,7 @@ const getEmployee = async (req, res) => {
 // ================================
 // Update an employee
 // ================================
+//FIXME : Loading + Data Fetching of Departments.
 const updateEmployee = async (req, res) => {
   try {
     const { id } = req.params;
