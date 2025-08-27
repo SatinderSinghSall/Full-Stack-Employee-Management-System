@@ -3,6 +3,7 @@ import { fetchDepartments } from "../../utils/EmployeeHelper";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { Pencil, Loader2 } from "lucide-react";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -15,6 +16,7 @@ const EditEmployee = () => {
     department: "",
   });
   const [departments, setDepartments] = useState(null);
+  const [loading, setLoading] = useState(false); // ✅ loading state
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -53,7 +55,7 @@ const EditEmployee = () => {
     };
 
     fetchEmployee();
-  }, []);
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -62,7 +64,7 @@ const EditEmployee = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true); // ✅ start loading
     try {
       const response = await axios.put(
         `${API_BASE_URL}/api/employee/${id}`,
@@ -74,13 +76,15 @@ const EditEmployee = () => {
         }
       );
       if (response.data.success) {
-        navigate("/admin-dashboard/employees");
         toast.success("Employee detail updated successfully!");
+        navigate("/admin-dashboard/employees");
       }
     } catch (error) {
       if (error.response && !error.response.data.success) {
         toast.error(error.response.data.error);
       }
+    } finally {
+      setLoading(false); // ✅ stop loading
     }
   };
 
@@ -180,16 +184,44 @@ const EditEmployee = () => {
               </div>
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
-              className="w-full mt-6 bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
+              disabled={loading}
+              className={`w-full mt-6 flex items-center justify-center gap-2 
+                font-bold py-2 px-4 rounded transition 
+                ${
+                  loading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-teal-600 hover:bg-teal-700 text-white"
+                }`}
             >
-              Edit Employee
+              {loading ? (
+                <>
+                  <Loader2 className="animate-spin" size={20} />
+                  Updating...
+                </>
+              ) : (
+                <>
+                  <Pencil size={20} />
+                  Edit Employee
+                </>
+              )}
             </button>
           </form>
         </div>
       ) : (
-        <div>Loading...</div>
+        <div className="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md animate-pulse">
+          <div className="h-6 w-40 bg-gray-300 rounded mb-6"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="h-10 bg-gray-200 rounded"></div>
+            <div className="h-10 bg-gray-200 rounded"></div>
+            <div className="h-10 bg-gray-200 rounded"></div>
+            <div className="h-10 bg-gray-200 rounded"></div>
+            <div className="col-span-2 h-10 bg-gray-200 rounded"></div>
+          </div>
+          <div className="h-12 w-full bg-gray-300 rounded mt-6"></div>
+        </div>
       )}
     </>
   );
