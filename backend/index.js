@@ -7,6 +7,9 @@ import authRouter from "./routes/auth.js";
 import departmentRouter from "./routes/department.js";
 import employeeRouter from "./routes/employee.js";
 
+//! To run the backend for DEVELOPMENT -> npm run dev
+//! To run the backend for PRODUCTION -> npm start
+
 if (process.env.NODE_ENV === "production") {
   dotenv.config({ path: ".env.production" });
 } else {

@@ -19,6 +19,9 @@ import AddEmployee from "./components/employee/AddEmployee";
 import ViewEmployee from "./components/employee/ViewEmployee";
 import EditEmployee from "./components/employee/EditEmployee";
 
+//! To run the backend for DEVELOPMENT -> npm run dev
+//! To run the backend for PRODUCTION -> npm start
+
 function App() {
   return (
     <BrowserRouter>
