@@ -1,15 +1,19 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
+// Pages
 import Login from "./pages/Login";
 import AdminDashboard from "./pages/AdminDashboard";
 import EmployeeDashboard from "./pages/EmployeeDashboard";
 import PrivateRoutes from "./pages/PrivateRoutes";
 import RoleBaseRoutes from "./pages/RoleBaseRoutes";
+import NotFound from "./pages/NotFound";
+
+// Components
 import AdminSummary from "./components/dashboard/AdminSummary";
 import DepartmentList from "./components/departments/DepartmentList";
 import AddDepartment from "./components/departments/AddDepartment";
 import EditDepartment from "./components/departments/EditDepartment";
+
 import EmployeeList from "./components/employee/EmployeeList";
 import AddEmployee from "./components/employee/AddEmployee";
 import ViewEmployee from "./components/employee/ViewEmployee";
@@ -19,9 +23,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Redirect root */}
         <Route path="/" element={<Navigate to="/admin-dashboard" />} />
+
         <Route path="/login" element={<Login />} />
 
+        {/* Admin Dashboard with Protected + Role */}
         <Route
           path="/admin-dashboard"
           element={
@@ -33,37 +40,30 @@ function App() {
           }
         >
           <Route index element={<AdminSummary />} />
+
           {/* Department Routes */}
+          <Route path="departments" element={<DepartmentList />} />
           <Route
-            path="/admin-dashboard/departments"
-            element={<DepartmentList />}
-          />
-          <Route
-            path="/admin-dashboard/departments/add-department"
+            path="departments/add-department"
             element={<AddDepartment />}
           />
-          <Route
-            path="/admin-dashboard/departments/edit/:id"
-            element={<EditDepartment />}
-          />
+          <Route path="departments/edit/:id" element={<EditDepartment />} />
 
           {/* Employee Routes */}
-          <Route path="/admin-dashboard/employees" element={<EmployeeList />} />
-          <Route
-            path="/admin-dashboard/employees/add-employee"
-            element={<AddEmployee />}
-          />
-          <Route
-            path="/admin-dashboard/employees/:id"
-            element={<ViewEmployee />}
-          />
-          <Route
-            path="/admin-dashboard/employees/edit/:id"
-            element={<EditEmployee />}
-          />
+          <Route path="employees" element={<EmployeeList />} />
+          <Route path="employees/add-employee" element={<AddEmployee />} />
+          <Route path="employees/:id" element={<ViewEmployee />} />
+          <Route path="employees/edit/:id" element={<EditEmployee />} />
+
+          {/* Catch all inside admin routes */}
+          <Route path="*" element={<NotFound />} />
         </Route>
 
+        {/* Employee Dashboard Route */}
         <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
+
+        {/* Global 404 fallback */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
