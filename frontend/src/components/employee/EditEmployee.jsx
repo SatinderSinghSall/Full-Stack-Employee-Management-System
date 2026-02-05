@@ -73,7 +73,7 @@ const EditEmployee = () => {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        }
+        },
       );
       if (response.data.success) {
         toast.success("Employee detail updated successfully!");
@@ -177,7 +177,7 @@ const EditEmployee = () => {
                   <option value="">Select Department</option>
                   {departments.map((dep) => (
                     <option key={dep._id} value={dep._id}>
-                      {dep.dep_name}
+                      {dep.Department_Name}
                     </option>
                   ))}
                 </select>

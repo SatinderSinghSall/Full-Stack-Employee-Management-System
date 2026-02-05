@@ -22,7 +22,7 @@ const upload = multer({
   fileFilter: (req, file, cb) => {
     const fileTypes = /jpeg|jpg|png/;
     const extname = fileTypes.test(
-      path.extname(file.originalname).toLowerCase()
+      path.extname(file.originalname).toLowerCase(),
     );
     const mimetype = fileTypes.test(file.mimetype);
     if (mimetype && extname) {
@@ -147,7 +147,6 @@ const getEmployee = async (req, res) => {
 // ================================
 // Update an employee
 // ================================
-//FIXME : Data Fetching of Departments.
 const updateEmployee = async (req, res) => {
   try {
     const { id } = req.params;
@@ -171,13 +170,13 @@ const updateEmployee = async (req, res) => {
         name,
         ...(req.file && { profileImage: req.file.filename }),
       },
-      { new: true }
+      { new: true },
     );
 
     const updatedEmployee = await Employee.findByIdAndUpdate(
       id,
       { maritalStatus, designation, salary, department },
-      { new: true }
+      { new: true },
     );
 
     return res.status(200).json({
