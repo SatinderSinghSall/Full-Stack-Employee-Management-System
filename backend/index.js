@@ -38,7 +38,7 @@ app.use(
       return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
-  })
+  }),
 );
 
 app.use(express.json());
@@ -57,6 +57,6 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(
-    `App server is live at http://localhost:${PORT} or https://employeems-backendcodebase.onrender.com`
+    `App server is live at http://localhost:${PORT} or https://employeems-backendcodebase.onrender.com`,
   );
 });
