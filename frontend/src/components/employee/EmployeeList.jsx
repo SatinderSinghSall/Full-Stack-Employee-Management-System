@@ -74,7 +74,7 @@ const EmployeeList = () => {
       }
 
       const filtered = employees.filter((emp) =>
-        emp?.name?.toLowerCase().includes(searchTerm.toLowerCase())
+        emp?.name?.toLowerCase().includes(searchTerm.toLowerCase()),
       );
 
       setFilteredEmployees(filtered);

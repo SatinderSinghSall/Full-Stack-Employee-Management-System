@@ -84,7 +84,7 @@ const addEmployee = async (req, res) => {
       email,
       password: hashedPassword,
       role,
-      profileImage: req.file ? req.file.filename : "",
+      profileImage: req.file ? `uploads/${req.file.filename}` : "",
     });
     const savedUser = await newUser.save();
 
@@ -150,46 +150,66 @@ const getEmployee = async (req, res) => {
 const updateEmployee = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, maritalStatus, designation, department, salary } = req.body;
+
+    const {
+      name,
+      email,
+      role,
+      password,
+      employeeId,
+      dob,
+      gender,
+      maritalStatus,
+      designation,
+      department,
+      salary,
+    } = req.body;
 
     const employee = await Employee.findById(id);
-    if (!employee) {
+    if (!employee)
       return res
         .status(404)
-        .json({ success: false, error: "Employee not found." });
+        .json({ success: false, error: "Employee not found" });
+
+    /* ================= USER UPDATE ================= */
+    const userUpdates = {
+      name,
+      email,
+      role,
+    };
+
+    // only update password if typed
+    if (password && password.trim() !== "") {
+      userUpdates.password = await bcrypt.hash(password, 10);
     }
 
-    const user = await User.findById(employee.userId);
-    if (!user) {
-      return res.status(404).json({ success: false, error: "User not found." });
+    // only update image if uploaded
+    if (req.file) {
+      userUpdates.profileImage = `uploads/${req.file.filename}`;
     }
 
-    const updatedUser = await User.findByIdAndUpdate(
-      employee.userId,
-      {
-        name,
-        ...(req.file && { profileImage: req.file.filename }),
-      },
-      { new: true },
-    );
+    await User.findByIdAndUpdate(employee.userId, userUpdates);
 
-    const updatedEmployee = await Employee.findByIdAndUpdate(
-      id,
-      { maritalStatus, designation, salary, department },
-      { new: true },
-    );
-
-    return res.status(200).json({
-      success: true,
-      message: "Employee updated successfully.",
-      employee: updatedEmployee,
-      user: updatedUser,
+    /* ================= EMPLOYEE UPDATE ================= */
+    await Employee.findByIdAndUpdate(id, {
+      employeeId,
+      dob,
+      gender,
+      maritalStatus,
+      designation,
+      department,
+      salary,
     });
-  } catch (error) {
-    console.error("Error while updating Employee details:", error);
-    return res.status(500).json({
+
+    res.json({
+      success: true,
+      message: "Employee updated successfully",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
       success: false,
-      error: "Server Error: Error while updating Employee details.",
+      error: "Update failed",
     });
   }
 };

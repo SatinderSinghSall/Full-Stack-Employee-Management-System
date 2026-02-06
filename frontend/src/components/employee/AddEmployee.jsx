@@ -32,7 +32,7 @@ const AddEmployee = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       if (response.data.success) {
@@ -44,7 +44,7 @@ const AddEmployee = () => {
         toast.error(error.response.data.error);
       } else {
         toast.error(
-          error.message || "An error occurred while adding the department."
+          error.message || "An error occurred while adding the department.",
         );
       }
       console.error("Error while adding a department:", error);
